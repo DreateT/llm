@@ -4,7 +4,7 @@
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 #Step2: Username and Password are hardcoded.
-# Use curl to login and grab the auth code
+#Use curl to login and grab the auth code
 curl -X POST http://localhost:8000/login \
   -H "Content-Type: application/json" \
   -d '{"username":"admin", "password":"password123"}'
