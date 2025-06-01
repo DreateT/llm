@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>EV Chatbot Assistant</title>
+</head>
+<body>
+  <h2>Login</h2>
+  <form id="login-form">
+    <input type="text" id="username" placeholder="Username" value="admin" required>
+    <input type="password" id="password" placeholder="Password" value="password123" required>
+    <button type="submit">Login</button>
+  </form>
+
+  <h2>Chat</h2>
+  <form id="chat-form">
+    <input type="text" id="query" placeholder="Ask a question..." required>
+    <button type="submit">Send</button>
+  </form>
+  <pre id="response"></pre>
+
+  <script>
+    let jwtToken = "";
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      const res = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await res.json();
+      if (data.access_token) {
+        jwtToken = data.access_token;
+        alert("Login successful");
+      } else {
+        alert("Login failed");
+      }
+    });
+
+    document.getElementById('chat-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const query = document.getElementById('query').value;
+
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwtToken}`
+        },
+        body: JSON.stringify({ query })
+      });
+
+      const data = await res.json();
+      document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>
+

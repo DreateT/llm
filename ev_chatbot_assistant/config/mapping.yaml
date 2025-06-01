@@ -1,0 +1,25 @@
+SOC: raw_telemetry.soc_pct
+SOH: battery_cycles.soh_pct
+battery temperature: raw_telemetry.batt_temp_c
+fleet: fleets.fleet_id
+vehicle model: vehicles.model
+vehicle ID: vehicles.vehicle_id
+license plate: vehicles.registration_no
+battery health: processed_metrics.battery_health_pct
+current SOC: raw_telemetry.soc_pct
+trip distance: trips.distance_km
+driving hours: trips.end_ts - trips.start_ts
+timestamp: ts
+latest: ORDER BY ts DESC LIMIT 1
+now: ORDER BY ts DESC LIMIT 1
+
+battery temperature: value
+temperature threshold: threshold
+battery alert: alerts
+timestamp: alert_ts
+last 24 hours: alert_ts >= NOW() - INTERVAL '24 HOURS'
+SRM T3: vehicle_id = 1
+high temperature: alert_type = 'HighTemp'
+
+alerts: alerts JOIN vehicles ON alerts.vehicle_id = vehicles.vehicle_id
+fleet_id: vehicles.fleet_id
